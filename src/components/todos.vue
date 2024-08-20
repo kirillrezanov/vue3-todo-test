@@ -1,20 +1,33 @@
 <template>
     <div v-if="todos.length > 0">
-        <ul>
-            <li class="todo_elem" v-for="todo in todos" :key="todo.id">
+        <div class="todo_elem" v-for="todo in todos" :key="todo.id">
+            <div v-if="!todo.isEditing">
                 <span class="todo_title">{{todo.title}}</span>
                 <span class="todo_text">{{todo.text}}</span>
-                <button class="delete" @click="deleteElem(todo.id)">Удалить</button>
-            </li>
-        </ul>
+                <hr>
+                <div class="todo_elem_bottom">
+                    <img src="../assets/delete.svg" @click="deleteElem(todo.id)" />
+                    <img src="../assets/edit.svg" @click="todo.isEditing = true" />
+                </div>
+            </div>
+            <div v-if="todo.isEditing">
+                <todoForm :elem="todo" @confirm-changes="confirmChanges"></todoForm>
+            </div>
+        </div>
     </div>
     <p v-if="todos.length == 0" class="empty">Элементов в списке нет.</p>
 </template>
 
 <script setup>
     import {ref} from "vue";
+    import todoForm from "@/components/edittodo.vue"
+
     defineProps(['todos']);
-    let emit = defineEmits(['delete-todo']);
+    let emit = defineEmits(['delete-todo', 'confirm-changes']);
+
+    const confirmChanges = elem => {
+        emit('confirm-changes', elem);
+    }
 
     const deleteElem = id => {
         if(confirm('Вы точно хотите удалить элемент?')) {
@@ -39,6 +52,16 @@
         padding: 15px;
         border-radius: 8px;
         box-sizing: border-box;
+    }
+
+    .todo_elem_bottom {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .todo_elem_bottom img {
+        width: 25px;
     }
 
     .todo_title {
@@ -71,5 +94,11 @@
         color: #333;
         font-weight: 700;
         font-family: sans-serif;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background-color: #c5c5c5;;
     }
 </style>

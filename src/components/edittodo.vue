@@ -1,22 +1,19 @@
 <template>
     <div class="form">
-        <input type="text" v-model="todoTitle" placeholder="Заголовок"><br>
-        <textarea name="" v-model="todoText" placeholder="Текст"></textarea>
-        <button @click="addTodo">Применить</button>
+        <input type="text" v-model="elem.title" placeholder="Заголовок"><br>
+        <textarea name="" v-model="elem.text" placeholder="Текст"></textarea>
+        <button @click="confirmChanges">Применить</button>
     </div>
 </template>
 
 <script setup>
     import {ref} from "vue";
-    let todoTitle = ref("");
-    let todoText = ref("");
-    const emit = defineEmits(['confirm-todo']);
+    const props = defineProps(['elem']);
+    const emit = defineEmits(['confirm-todo', 'confirm-changes']);
 
-    const addTodo = () => {
-        if(todoTitle.value && todoText.value) {
-            emit('confirm-todo', {title : todoTitle.value, text : todoText.value});
-            todoTitle.value = "";
-            todoText.value = "";
+    const confirmChanges = () => {
+        if(props.elem.title && props.elem.text) {
+            emit('confirm-changes', props.elem);
         }
     }
 </script>
