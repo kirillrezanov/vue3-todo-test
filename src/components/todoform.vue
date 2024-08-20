@@ -2,7 +2,7 @@
     <div class="form">
         <input type="text" v-model="todoTitle" placeholder="Заголовок"><br>
         <textarea name="" v-model="todoText" placeholder="Текст"></textarea>
-        <button @click="addTodo">Применить</button>
+        <button @click="addTodo">Добавить</button>
     </div>
 </template>
 
